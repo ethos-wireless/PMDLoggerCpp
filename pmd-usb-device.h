@@ -2,6 +2,8 @@
 #include <chrono>
 #include <thread>
 #include <mutex>
+#include <atomic>
+#include <memory>
 
 #include <CppLinuxSerial/SerialPort.hpp>
 using namespace mn::CppLinuxSerial;
@@ -29,7 +31,7 @@ public:
   ~PmdUsbDevice();
 
   void cont_read();
-
+  void disable() {active_ = false;}
 enum UART_CMD : uint8_t
 {
     UART_CMD_WELCOME,
@@ -49,7 +51,7 @@ enum UART_CMD : uint8_t
 private:
   std::string port_;
   size_t speed_;
-  bool active_;
+  std::atomic<bool> active_;
 
   SerialPort serial_port_;
   size_t id_;
